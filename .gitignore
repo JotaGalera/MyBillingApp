@@ -53,6 +53,10 @@ Packages
 xcuserdata
 *.xcodeproj
 
+# CocoaPods
+Podfile.lock
+*.xcworkspace
+
 ### Xcode Patch ###
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj

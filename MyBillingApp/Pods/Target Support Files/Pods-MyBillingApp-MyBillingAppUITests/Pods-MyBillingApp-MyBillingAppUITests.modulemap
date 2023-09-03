@@ -1,0 +1,6 @@
+framework module Pods_MyBillingApp_MyBillingAppUITests {
+  umbrella header "Pods-MyBillingApp-MyBillingAppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

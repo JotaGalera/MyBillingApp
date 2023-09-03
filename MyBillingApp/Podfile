@@ -1,0 +1,22 @@
+use_frameworks!
+inhibit_all_warnings!
+
+def default_pods 
+  pod 'Sourcery'
+end
+
+target 'MyBillingApp' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  default_pods
+
+  # Pods for MyBillingApp
+
+  target 'MyBillingAppTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'MyBillingAppUITests' do
+    # Pods for testing
+  end
+end

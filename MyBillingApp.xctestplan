@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "93A85BD5-EB38-48F3-93BD-31800F7E6A25",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MyBillingApp.xcodeproj",
+      "identifier" : "8991B8FF2AA49E4200575598",
+      "name" : "MyBillingApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MyBillingApp.xcodeproj",
+        "identifier" : "8991B9152AA49E4300575598",
+        "name" : "MyBillingAppTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MyBillingApp.xcodeproj",
+        "identifier" : "8991B91F2AA49E4300575598",
+        "name" : "MyBillingAppUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
