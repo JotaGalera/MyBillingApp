@@ -13,7 +13,7 @@ struct MyBillingAppApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CompanyProfileView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
