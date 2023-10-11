@@ -5,13 +5,15 @@
 //  Created by Javier Galera Garrido on 3/9/23.
 //
 
-import SwiftUI
-import PhotosUI
+import AppKit
 import CoreData
+import PhotosUI
+import SwiftUI
 
 struct CompanyProfileView: View {
-    @State var companyName: String = ""
-    @State var companyPhoto: [PhotosPickerItem] = []
+    @State private var companyName: String = ""
+    @State private var photoCompany: PhotosPickerItem?
+    @State private var companyImage: Image?
     
     @Environment(\.managedObjectContext) private var viewContext
     private let constants = CompanyProfileViewConstants()
@@ -39,15 +41,21 @@ struct CompanyProfileView: View {
                                     bottom: 0,
                                     trailing: 20))
                 
-                PhotosPicker(selection: $companyPhoto,
-                             maxSelectionCount: 1,
-                             selectionBehavior: .default,
-                             matching: .images,
-                             preferredItemEncoding: .automatic) {
-                    Text(constants.logoPickerButton)
-                }
+                PhotosPicker(constants.logoPickerButton,
+                             selection: $photoCompany,
+                             matching: .images)
                 
                 Spacer()
+            }
+            .onChange(of: photoCompany) { _ in
+                Task {
+                    if let data = try? await photoCompany?.loadTransferable(type: Data.self) {
+                        if let nsImage = NSImage(data: data) {
+                            companyImage = Image(nsImage: nsImage)
+                            return
+                        }
+                    }
+                }
             }
         }
     }
