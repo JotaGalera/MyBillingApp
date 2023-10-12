@@ -20,10 +20,12 @@ class CompanyProfileViewModel: ObservableObject {
     }
     @Published var isCompanyConfigured: Bool = false
     
-    init() {
-        getCompanyUseCase = GetCompanyUseCaseImplementation()
-        addCompanyUseCase = AddCompanyUseCaseImplementation()
-        resetCompanyUseCase = ResetCompanyUseCaseImplementation()
+    init(getCompanyUseCase: GetCompanyUseCase = GetCompanyUseCaseImplementation(),
+         addCompanyUseCase: AddCompanyUseCase = AddCompanyUseCaseImplementation(),
+         resetCompanyUseCase: ResetCompanyUseCase = ResetCompanyUseCaseImplementation()) {
+        self.getCompanyUseCase = getCompanyUseCase
+        self.addCompanyUseCase = addCompanyUseCase
+        self.resetCompanyUseCase = resetCompanyUseCase
         
         getCompanyData()
     }

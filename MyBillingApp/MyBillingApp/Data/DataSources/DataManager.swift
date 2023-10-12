@@ -14,6 +14,7 @@ enum DataManagerType {
 
 class DataManager: NSObject, ObservableObject {
     static let shared = DataManager(type: .normal)
+    static let testing = DataManager(type: .testing)
     
     @Published var company: CompanyModel?
     
@@ -91,10 +92,6 @@ extension DataManager: NSFetchedResultsControllerDelegate {
 
 //MARK: - CRUD operations
 extension DataManager {
-    func getCompany() -> CompanyModel? {
-        return company
-    }
-    
     func updateAndSaveCompany(model: CompanyModel) {
         let predicate = NSPredicate(format: "name = %@", model.name)
         let result = fetchFirst(Company.self, predicate: predicate)

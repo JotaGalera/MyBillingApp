@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol GetCompanyUseCase {
+protocol GetCompanyUseCase: AutoMockable {
     func execute() -> CompanyModel?
 }
 
@@ -19,7 +19,7 @@ class GetCompanyUseCaseImplementation: GetCompanyUseCase {
     }
     
     func execute() -> CompanyModel? {
-        if let result = dataManager.getCompany() {
+        if let result = dataManager.company {
             return result
         } else {
             return nil

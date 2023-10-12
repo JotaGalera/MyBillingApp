@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CompanyModel {
+struct CompanyModel: Equatable {
     var name: String
     var image: Data
 }

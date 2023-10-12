@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol AddCompanyUseCase {
+protocol AddCompanyUseCase: AutoMockable {
     func execute(model: CompanyModel)
 }
 

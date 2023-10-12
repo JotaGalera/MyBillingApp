@@ -4,6 +4,7 @@
 // swiftlint:disable variable_name
 
 import Foundation
+@testable import MyBillingApp
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
 #elseif os(OSX)
@@ -33,53 +34,69 @@ import AppKit
 
 
 
-class FakeModelMock: FakeModel {
+class AddCompanyUseCaseMock: AddCompanyUseCase {
 
 
 
 
-    //MARK: - createThis
+    //MARK: - execute
 
-    var createThisAsdfFdasCallsCount = 0
-    var createThisAsdfFdasCalled: Bool {
-        return createThisAsdfFdasCallsCount > 0
+    var executeModelCallsCount = 0
+    var executeModelCalled: Bool {
+        return executeModelCallsCount > 0
     }
-    var createThisAsdfFdasReceivedArguments: (asdf: String, fdas: Int)?
-    var createThisAsdfFdasReceivedInvocations: [(asdf: String, fdas: Int)] = []
-    var createThisAsdfFdasReturnValue: String!
-    var createThisAsdfFdasClosure: ((String, Int) -> String)?
+    var executeModelReceivedModel: CompanyModel?
+    var executeModelReceivedInvocations: [CompanyModel] = []
+    var executeModelClosure: ((CompanyModel) -> Void)?
 
-    func createThis(asdf: String, fdas: Int) -> String {
-        createThisAsdfFdasCallsCount += 1
-        createThisAsdfFdasReceivedArguments = (asdf: asdf, fdas: fdas)
-        createThisAsdfFdasReceivedInvocations.append((asdf: asdf, fdas: fdas))
-        if let createThisAsdfFdasClosure = createThisAsdfFdasClosure {
-            return createThisAsdfFdasClosure(asdf, fdas)
+    func execute(model: CompanyModel) {
+        executeModelCallsCount += 1
+        executeModelReceivedModel = model
+        executeModelReceivedInvocations.append(model)
+        executeModelClosure?(model)
+    }
+
+}
+class GetCompanyUseCaseMock: GetCompanyUseCase {
+
+
+
+
+    //MARK: - execute
+
+    var executeCallsCount = 0
+    var executeCalled: Bool {
+        return executeCallsCount > 0
+    }
+    var executeReturnValue: CompanyModel?
+    var executeClosure: (() -> CompanyModel?)?
+
+    func execute() -> CompanyModel? {
+        executeCallsCount += 1
+        if let executeClosure = executeClosure {
+            return executeClosure()
         } else {
-            return createThisAsdfFdasReturnValue
+            return executeReturnValue
         }
     }
 
-    //MARK: - deleteThis
+}
+class ResetCompanyUseCaseMock: ResetCompanyUseCase {
 
-    var deleteThisAsdfFdasCallsCount = 0
-    var deleteThisAsdfFdasCalled: Bool {
-        return deleteThisAsdfFdasCallsCount > 0
+
+
+
+    //MARK: - execute
+
+    var executeCallsCount = 0
+    var executeCalled: Bool {
+        return executeCallsCount > 0
     }
-    var deleteThisAsdfFdasReceivedArguments: (asdf: String, fdas: Int)?
-    var deleteThisAsdfFdasReceivedInvocations: [(asdf: String, fdas: Int)] = []
-    var deleteThisAsdfFdasReturnValue: String!
-    var deleteThisAsdfFdasClosure: ((String, Int) -> String)?
+    var executeClosure: (() -> Void)?
 
-    func deleteThis(asdf: String, fdas: Int) -> String {
-        deleteThisAsdfFdasCallsCount += 1
-        deleteThisAsdfFdasReceivedArguments = (asdf: asdf, fdas: fdas)
-        deleteThisAsdfFdasReceivedInvocations.append((asdf: asdf, fdas: fdas))
-        if let deleteThisAsdfFdasClosure = deleteThisAsdfFdasClosure {
-            return deleteThisAsdfFdasClosure(asdf, fdas)
-        } else {
-            return deleteThisAsdfFdasReturnValue
-        }
+    func execute() {
+        executeCallsCount += 1
+        executeClosure?()
     }
 
 }
