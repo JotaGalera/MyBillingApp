@@ -9,12 +9,9 @@ import SwiftUI
 
 @main
 struct MyBillingAppApp: App {
-    let persistenceController = PersistenceController.shared
-
     var body: some Scene {
         WindowGroup {
             CompanyProfileView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

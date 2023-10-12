@@ -11,24 +11,46 @@ import PhotosUI
 import SwiftUI
 
 struct CompanyProfileView: View {
-    @State private var companyName: String = ""
-    @State private var photoCompany: PhotosPickerItem?
-    @State private var companyImage: Image?
+    @StateObject var viewModel: CompanyProfileViewModel
+    @State private var photoCompany: PhotosPickerItem? = nil
+    @State var companyName: String = ""
+    @State var companyImage: Data? = nil
     
-    @Environment(\.managedObjectContext) private var viewContext
     private let constants = CompanyProfileViewConstants()
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Company.name, ascending: true)],
-        animation: .default)
-    private var companies: FetchedResults<Company>
-    
+    init() {
+        _viewModel = StateObject(wrappedValue: CompanyProfileViewModel())
+    }
+
     var body: some View {
-        if wasCompanyConfigured() {
-            // TODO: Show company Info
+        if viewModel.isCompanyConfigured {
+            VStack {
+                HStack {
+                    Spacer()
+                    Text(companyName)
+                    
+                    Spacer()
+                    if let data = companyImage {
+                        Image(nsImage: NSImage(data: data)!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 500, height: 500)
+                    }
+                }
+                
+                Button {
+                    viewModel.resetCompanyData()
+                    refreshCompanyData()
+                } label: {
+                    Text("Reset Company Data")
+                }
+
+            }
+            .onAppear {
+                refreshCompanyData()
+            }
         } else {
             VStack {
-                
                 Spacer()
                 
                 Text(constants.titleView)
@@ -46,22 +68,50 @@ struct CompanyProfileView: View {
                              matching: .images)
                 
                 Spacer()
+                
+                if showSaveButton() {
+                    HStack {
+                        Spacer()
+                        Text(companyName)
+                        
+                        Spacer()
+                        if let data = companyImage {
+                            Image(nsImage: NSImage(data: data)!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 500, height: 500)
+                        }
+                    }
+                        
+                    Button {
+                        viewModel.createCompanyData(name: companyName, image: companyImage)
+                        refreshCompanyData()
+                    } label: {
+                        Text("Save Information")
+                    }
+                }
+                
+            }
+            .onAppear {
+                refreshCompanyData()
             }
             .onChange(of: photoCompany) { _ in
                 Task {
                     if let data = try? await photoCompany?.loadTransferable(type: Data.self) {
-                        if let nsImage = NSImage(data: data) {
-                            companyImage = Image(nsImage: nsImage)
-                            return
-                        }
+                        companyImage = data
                     }
                 }
             }
         }
     }
     
-    private func wasCompanyConfigured() -> Bool {
-        return companies.first != nil
+    private func refreshCompanyData() {
+        companyName = viewModel.companyModel?.name ?? ""
+        companyImage = viewModel.companyModel?.image
+    }
+        
+    private func showSaveButton() -> Bool {
+        return !companyName.isEmpty && companyImage != nil
     }
 }
 
