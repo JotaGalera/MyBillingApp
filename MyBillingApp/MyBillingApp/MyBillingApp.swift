@@ -11,7 +11,7 @@ import SwiftUI
 struct MyBillingAppApp: App {
     var body: some Scene {
         WindowGroup {
-            CompanyProfileView()
+            CompanyProfileView(viewModel: CompanyProfileViewModel())
         }
     }
 }

@@ -16,10 +16,8 @@ struct CompanyProfileView: View {
     @State var companyName: String = ""
     @State var companyImage: Data? = nil
     
-    private let constants = CompanyProfileViewConstants()
-    
-    init() {
-        _viewModel = StateObject(wrappedValue: CompanyProfileViewModel())
+    init(viewModel: CompanyProfileViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -40,30 +38,30 @@ struct CompanyProfileView: View {
                 
                 Button {
                     viewModel.resetCompanyData()
-                    refreshCompanyData()
                 } label: {
                     Text("Reset Company Data")
                 }
 
             }
             .onAppear {
-                refreshCompanyData()
+                companyName = viewModel.companyModel?.name ?? ""
+                companyImage = viewModel.companyModel?.image
             }
         } else {
             VStack {
                 Spacer()
                 
-                Text(constants.titleView)
-                Text(constants.descriptionView)
+                Text(CompanyProfileViewConstants.titleView)
+                Text(CompanyProfileViewConstants.descriptionView)
                 
-                TextField(constants.nameTextField,
+                TextField(CompanyProfileViewConstants.nameTextField,
                           text: $companyName)
                 .padding(EdgeInsets(top: 0,
                                     leading: 20,
                                     bottom: 0,
                                     trailing: 20))
                 
-                PhotosPicker(constants.logoPickerButton,
+                PhotosPicker(CompanyProfileViewConstants.logoPickerButton,
                              selection: $photoCompany,
                              matching: .images)
                 
@@ -72,11 +70,12 @@ struct CompanyProfileView: View {
                 if showSaveButton() {
                     HStack {
                         Spacer()
+                        
                         Text(companyName)
                         
                         Spacer()
-                        if let data = companyImage {
-                            Image(nsImage: NSImage(data: data)!)
+                        if let companyImage {
+                            Image(nsImage: NSImage(data: companyImage)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 500, height: 500)
@@ -84,8 +83,8 @@ struct CompanyProfileView: View {
                     }
                         
                     Button {
-                        viewModel.createCompanyData(name: companyName, image: companyImage)
-                        refreshCompanyData()
+                        viewModel.createCompanyData(name: companyName,
+                                                    image: companyImage)
                     } label: {
                         Text("Save Information")
                     }
@@ -93,7 +92,8 @@ struct CompanyProfileView: View {
                 
             }
             .onAppear {
-                refreshCompanyData()
+                companyName = viewModel.companyModel?.name ?? ""
+                companyImage = viewModel.companyModel?.image
             }
             .onChange(of: photoCompany) { _ in
                 Task {
@@ -105,25 +105,23 @@ struct CompanyProfileView: View {
         }
     }
     
-    private func refreshCompanyData() {
-        companyName = viewModel.companyModel?.name ?? ""
-        companyImage = viewModel.companyModel?.image
-    }
-        
     private func showSaveButton() -> Bool {
         return !companyName.isEmpty && companyImage != nil
     }
 }
 
-struct CompanyProfileViewConstants {
-    let titleView = "Bienvenido a My Billing App."
-    let descriptionView = "Comienza introduciendo tu nombre o el de tu empresa."
-    let nameTextField = "Introduce el nombre de la empresa:"
-    let logoPickerButton = "¿Tienes logo? Subelo aquí."
+extension CompanyProfileView {
+    enum CompanyProfileViewConstants {
+        static let titleView = "Bienvenido a My Billing App."
+        static let descriptionView = "Comienza introduciendo tu nombre o el de tu empresa."
+        static let nameTextField = "Introduce el nombre de la empresa:"
+        static let logoPickerButton = "¿Tienes logo? Subelo aquí."
+    }
 }
 
 struct CompanyProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        CompanyProfileView()
+        CompanyProfileView(viewModel: CompanyProfileViewModel())
     }
 }
+

@@ -13,7 +13,7 @@ class CompanyProfileViewModel: ObservableObject {
     private var getCompanyUseCase: GetCompanyUseCase
     private var addCompanyUseCase: AddCompanyUseCase
     private var resetCompanyUseCase: ResetCompanyUseCase
-    var companyModel: CompanyModel? {
+    @Published var companyModel: CompanyModel? {
         didSet {
             isCompanyConfigured = companyModel != nil
         }
